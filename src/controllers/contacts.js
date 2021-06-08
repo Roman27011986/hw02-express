@@ -1,7 +1,5 @@
 const fs = require('fs/promises')
-// const contacts = require('./contacts.json')
 const path = require('path')
-// const { v4: uuidv4 } = require('uuid')
 const contactsPath = path.normalize('./data/contacts.json')
 const ContactsService = require('../services/contacts')
 const contactsService = new ContactsService()
