@@ -7,6 +7,10 @@ const schemaCreateContact = Joi.object({
   favorite: Joi.boolean().required(),
 });
 
+const schemaPatchContact = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
 const schemaUpdateContact = Joi.object({
   name: Joi.string().alphanum().min(3).max(20).optional(),
   phone: Joi.string().optional(),
@@ -30,4 +34,8 @@ module.exports.validateAddContac = (req, res, next) => {
 
 module.exports.validateUpdateContact = (req, res, next) => {
   return validate(schemaUpdateContact, req.body, next);
+};
+
+module.exports.validatePatchContact = (req, res, next) => {
+  return validate(schemaPatchContact, req.body, next);
 };

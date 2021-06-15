@@ -17,7 +17,7 @@ const listContacts = async (req, res, next) => {
 const getContactById = async (req, res, next) => {
   try {
     const contact = await contactsService.getById(req.params.contactId);
-    if (contact.length === 0) {
+    if (!contact) {
       return next({
         status: '404',
         message: 'Not found',
@@ -69,13 +69,35 @@ const updateContact = async (req, res, next) => {
       req.params.contactId,
       req.body,
     );
+    if (!updateContact) {
+      return next({ message: 'Not found', status: '404' });
+    }
     return res.status(200).json({
       message: 'success',
       status: '200',
       updateContact,
     });
   } catch (error) {
-    next({ message: 'Not found', status: '404' });
+    next(error);
+  }
+};
+
+const patchContact = async (req, res, next) => {
+  try {
+    const updateContact = await contactsService.patchContact(
+      req.params.contactId,
+      req.body,
+    );
+    if (!updateContact) {
+      return next({ message: 'Not found', status: '404' });
+    }
+    return res.status(200).json({
+      message: 'success',
+      status: '200',
+      updateContact,
+    });
+  } catch (error) {
+    next(error);
   }
 };
 module.exports = {
@@ -84,4 +106,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  patchContact,
 };

@@ -29,7 +29,11 @@ class ContactsService {
 
   async updateContact(id, body) {
     const result = await this.repositories.contacts.updateContact(id, body);
-    console.log('repo:', result);
+    return result;
+  }
+
+  async patchContact(id, body) {
+    const result = await this.repositories.contacts.patchContact(id, body);
     return result;
   }
 }
