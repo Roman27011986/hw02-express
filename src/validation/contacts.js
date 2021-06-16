@@ -4,7 +4,7 @@ const schemaCreateContact = Joi.object({
   name: Joi.string().min(3).max(20).required(),
   phone: Joi.string().required(),
   email: Joi.string().required(),
-  favorite: Joi.boolean().required(),
+  favorite: Joi.boolean().optional(),
 });
 
 const schemaPatchContact = Joi.object({

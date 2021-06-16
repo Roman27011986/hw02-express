@@ -6,6 +6,7 @@ class ContactsRepository {
   }
 
   async getContacts() {
+    console.log(this.model);
     const listContacts = await this.model.find({});
     return listContacts;
   }
@@ -16,6 +17,9 @@ class ContactsRepository {
 
   async addContact(body) {
     const result = await this.model.create(body);
+    if (!result.favorite) {
+      result.favorite = false;
+    }
     return result;
   }
   async removeContact(id) {
