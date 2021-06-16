@@ -17,9 +17,6 @@ class ContactsRepository {
 
   async addContact(body) {
     const result = await this.model.create(body);
-    if (!result.favorite) {
-      result.favorite = false;
-    }
     return result;
   }
   async removeContact(id) {
