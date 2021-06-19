@@ -1,101 +1,110 @@
-const fs = require('fs/promises')
-const path = require('path')
-const contactsPath = path.normalize('./data/contacts.json')
-const ContactsService = require('../services/contacts')
-const contactsService = new ContactsService()
+const ContactsService = require('../services/contacts');
+const contactsService = new ContactsService();
 
 const listContacts = async (req, res, next) => {
   try {
-    const listContacts = await contactsService.getAll()
+    const listContacts = await contactsService.getContacts();
     res.status(200).json({
       message: 'success',
       status: '200',
-      listContacts
-    })
+      listContacts,
+    });
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
 
 const getContactById = async (req, res, next) => {
   try {
-    const contact = await contactsService.getById(req.params.contactId)
+    const contact = await contactsService.getById(req.params.contactId);
     if (!contact) {
-      res.status(404).json({
-        message: 'Not found',
+      return next({
         status: '404',
-      })
+        message: 'Not found',
+      });
     }
     res.status(200).json({
       message: 'success',
       status: '200',
-      contact
-    })
+      contact,
+    });
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
+
+const addContact = async (req, res, next) => {
+  try {
+    const contact = await contactsService.addContact(req.body);
+    res.status(201).json({
+      status: '201',
+      contact,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 const removeContact = async (req, res, next) => {
   try {
-    if (!await contactsService.removeContact(req.params.contactId)) {
-      res.status(404).json({
-        message: 'not found',
-        status: '404'
-      })
-      return
+    const contacts = await contactsService.removeContact(req.params.contactId);
+    if (!contacts) {
+      return next({
+        status: '404',
+        message: 'Not found',
+      });
     }
     res.status(200).json({
       message: 'contact deleted',
-      status: 'success'
-    })
+      status: 'success',
+    });
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
-
-const addContact = async (req, res, next) => {
-try {
-  const contact = await contactsService.addContact(req.body)
-  res.status(201).json({
-    status:'201',
-    contact
-  })
-} catch (error) {
-  next(error)
-}
-}
+};
 
 const updateContact = async (req, res, next) => {
   try {
-    const {name, email, phone} = req.body
-    if (name || email || phone) {
-      const updateContact = await contactsService.updateContact(req.params.contactId, req.body)
-      return updateContact ? 
-      res.status(200).json({
-        message: 'success',
-        status: '200',
-        updateContact
-      })
-      :
-      res.status(200).json({
-        message: 'Not found',
-        status: '404',
-      })
+    const updateContact = await contactsService.updateContact(
+      req.params.contactId,
+      req.body,
+    );
+    if (!updateContact) {
+      return next({ message: 'Not found', status: '404' });
     }
-    return res.status(400).json({
-      message:'missing fields',
-      status:'400'
-     })
+    return res.status(200).json({
+      message: 'success',
+      status: '200',
+      updateContact,
+    });
   } catch (error) {
-    next(error)
+    next(error);
   }
-  
-}
+};
+
+const patchContact = async (req, res, next) => {
+  try {
+    const updateContact = await contactsService.patchContact(
+      req.params.contactId,
+      req.body,
+    );
+    if (!updateContact) {
+      return next({ message: 'Not found', status: '404' });
+    }
+    return res.status(200).json({
+      message: 'success',
+      status: '200',
+      updateContact,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
-}
+  patchContact,
+};
