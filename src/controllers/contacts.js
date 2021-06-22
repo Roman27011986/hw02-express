@@ -35,7 +35,8 @@ const getContactById = async (req, res, next) => {
 
 const addContact = async (req, res, next) => {
   try {
-    const contact = await contactsService.addContact(req.body);
+    const uid = req.user.id;
+    const contact = await contactsService.addContact(req.body, uid);
     res.status(201).json({
       status: '201',
       contact,
