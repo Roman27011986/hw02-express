@@ -6,11 +6,11 @@ const guard = (req, res, next) => {
   passport.authenticate('jwt', { session: false }, (err, user) => {
     if (err || !user) {
       return next({
-        status: '403',
-        message: 'Forbbiden',
+        status: '401',
+        message: 'Not authorized',
       });
     }
-    //положили юзера что бы получить к нему доступ в когтактах
+    //положили юзера что бы получить к нему доступ в контактах
     req.user = user;
     return next();
   })(req, res, next);
