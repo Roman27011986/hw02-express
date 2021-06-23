@@ -19,7 +19,7 @@ class UsersRepository {
     const user = new this.model(body);
     return user.save();
   }
-  //не лучше ли вынести обновление токена куданибудь например репозиторий аунтификации???
+
   async updateToken(id, token) {
     await this.model.updateOne({ _id: id }, { token });
   }

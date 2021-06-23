@@ -13,7 +13,7 @@ class AuthService {
   async login({ email, password }) {
     const user = await this.repositories.users.findByEmail(email);
     if (!user || !(await user.validPassword(password))) {
-      return null;
+      return { token: null };
     }
     const id = user.id;
     const payload = { id };
@@ -23,7 +23,7 @@ class AuthService {
     await this.repositories.users.updateToken(id, token);
     //Зачем мы возвращаем токен???
     //Почему не возвращаем токен при регистрации???
-    return token;
+    return { token, user };
   }
 
   async logout(id) {

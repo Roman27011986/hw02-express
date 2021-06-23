@@ -30,9 +30,8 @@ const signup = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   const { email, password } = req.body;
-
   try {
-    const token = await serviceAuth.login({
+    const { token, user } = await serviceAuth.login({
       email,
       password,
     });
@@ -42,6 +41,10 @@ const login = async (req, res, next) => {
         code: '200',
         data: {
           token,
+          user: {
+            email,
+            subscription: user.subscription,
+          },
         },
       });
     }

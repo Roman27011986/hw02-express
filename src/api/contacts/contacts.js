@@ -17,15 +17,10 @@ const router = express.Router();
 const guard = require('../../helpers/guard');
 
 router.get('/', guard, listContacts);
-
 router.get('/:contactId', guard, getContactById);
-
 router.post('/', guard, validateAddContac, addContact);
-
 router.delete('/:contactId', guard, removeContact);
-
 router.put('/:contactId', guard, validateUpdateContact, updateContact);
-
 router.patch('/:contactId', guard, validatePatchContact, patchContact);
 
 module.exports = router;

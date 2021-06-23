@@ -5,9 +5,8 @@ class ContactsRepository {
     this.model = Contact;
   }
 
-  async getContacts() {
-    console.log(this.model);
-    const listContacts = await this.model.find({});
+  async getContacts(uid) {
+    const listContacts = await this.model.find({ owner: uid });
     return listContacts;
   }
   async getById(id) {
