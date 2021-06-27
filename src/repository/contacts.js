@@ -9,8 +9,8 @@ class ContactsRepository {
     const listContacts = await this.model.find({ owner: uid });
     return listContacts;
   }
-  async getById(id) {
-    const result = await this.model.findOne({ _id: id });
+  async getById(uid, id) {
+    const result = await this.model.findOne({ _id: id, owner: uid });
     return result;
   }
 
@@ -18,22 +18,25 @@ class ContactsRepository {
     const result = await this.model.create({ ...body, owner: uid });
     return result;
   }
-  async removeContact(id) {
-    const result = await this.model.findByIdAndRemove({ _id: id });
+  async removeContact(uid, id) {
+    const result = await this.model.findOneAndDelete({ _id: id, owner: uid });
+
     return result;
   }
-  async updateContact(id, body) {
-    const result = await this.model.findByIdAndUpdate(
+  async updateContact(uid, id, body) {
+    const result = await this.model.findOneAndUpdate(
       { _id: id },
+      { owner: uid },
       { ...body },
       { new: true },
     );
     return result;
   }
 
-  async patchContact(id, body) {
-    const result = await this.model.findByIdAndUpdate(
+  async patchContact(uid, id, body) {
+    const result = await this.model.findOneAndUpdate(
       { _id: id },
+      { owner: uid },
       { ...body },
       { new: true },
     );
