@@ -5,9 +5,8 @@ class ContactsRepository {
     this.model = Contact;
   }
 
-  async getContacts() {
-    console.log(this.model);
-    const listContacts = await this.model.find({});
+  async getContacts(uid) {
+    const listContacts = await this.model.find({ owner: uid });
     return listContacts;
   }
   async getById(id) {
@@ -15,8 +14,8 @@ class ContactsRepository {
     return result;
   }
 
-  async addContact(body) {
-    const result = await this.model.create(body);
+  async addContact(body, uid) {
+    const result = await this.model.create({ ...body, owner: uid });
     return result;
   }
   async removeContact(id) {

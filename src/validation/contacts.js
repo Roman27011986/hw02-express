@@ -17,9 +17,20 @@ const schemaUpdateContact = Joi.object({
   email: Joi.string().optional(),
 }).or('name', 'phone', 'email');
 
+const schemaCreateUser = Joi.object({
+  password: Joi.string().min(3).max(20).required(),
+  email: Joi.string().required(),
+  subscription: Joi.string().optional(),
+});
+
+// const schemaLoginUser = Joi.object({
+//   password: Joi.string().min(3).max(20).required(),
+//   email: Joi.string().required(),
+//   subscription: Joi.string().optional(),
+// });
+
 const validate = (schema, body, next) => {
   const { error } = schema.validate(body);
-  console.log(error);
   if (error) {
     const [{ message }] = error.details;
     return next({
@@ -38,4 +49,8 @@ module.exports.validateUpdateContact = (req, res, next) => {
 
 module.exports.validatePatchContact = (req, res, next) => {
   return validate(schemaPatchContact, req.body, next);
+};
+
+module.exports.validateCreateUser = (req, res, next) => {
+  return validate(schemaCreateUser, req.body, next);
 };
