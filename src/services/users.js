@@ -20,6 +20,11 @@ class UserService {
     const data = await this.repositories.users.findById(id);
     return data;
   }
+
+  async patchAvatar(id, newUrl) {
+    const data = await this.repositories.users.updateAvatar(id, newUrl);
+    return data;
+  }
 }
 
 module.exports = UserService;
