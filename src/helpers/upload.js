@@ -9,8 +9,8 @@ const storage = multer.diskStorage({
     cb(null, UPLOAD_DIR);
   },
   filename: function (req, file, cb) {
-    const qwe = req.user.id + file.originalname;
-    cb(null, qwe);
+    const urlName = req.user.id + file.originalname;
+    cb(null, urlName);
   },
 });
 const upload = multer({
