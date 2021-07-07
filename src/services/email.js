@@ -34,7 +34,6 @@ class EmailService {
   async sendEmail(verifyToken, email, name) {
     const emailBody = this.#createTemplate(verifyToken, name);
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-    console.log(email);
     const msg = {
       to: email, // Change to your recipient
       // from: 'noreply@system-contacts.com', // Change to your verified sender
