@@ -97,10 +97,31 @@ const patchAvatar = async (req, res, next) => {
   res.redirect('/');
 };
 
+const verify = async (req, res, next) => {
+  try {
+    //передаем токен верификации
+    const result = await serviceUser.verify(req.params);
+    if (result) {
+      return res.status(200).json({
+        code: '200',
+        message: 'Verification successful',
+      });
+    } else {
+      return next({
+        status: '404 Not Found',
+        message: 'User not found',
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   signup,
   login,
   logout,
   currentUser,
   patchAvatar,
+  verify,
 };

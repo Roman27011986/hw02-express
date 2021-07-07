@@ -12,7 +12,7 @@ class AuthService {
 
   async login({ email, password }) {
     const user = await this.repositories.users.findByEmail(email);
-    if (!user || !(await user.validPassword(password))) {
+    if (!user || !(await user.validPassword(password)) || !user.verify) {
       return { token: null };
     }
     const id = user.id;
