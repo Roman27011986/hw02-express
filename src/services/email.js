@@ -5,28 +5,46 @@ class EmailService {
   #sender = sgMail;
   #GenerateTemplate = Mailgen;
   #createTemplate(verifyToken, name) {
-    mailGenerator = new this.#GenerateTemplate({
+    const mailGenerator = new this.#GenerateTemplate({
       theme: 'default',
-      link: 'http://localhost:3000/',
+      product: {
+        name: 'System Contacts',
+        link: 'http://localhost:3000/',
+      },
     });
     const template = {
       body: {
         name,
-        intro: "Welcome to Systen Contacts! We're very excited to have you on board.",
+        intro: "Welcome to System Contacts! We're very excited to have you on board.",
         action: {
-          instructions: 'To get started with Mailgen, please click here:',
+          instructions: 'To get started with to System Contacts, please click here:',
           button: {
             color: '#22BC66', // Optional action button color
             text: 'Confirm your account',
-            link: 'https://mailgen.js/confirm?s=d9729feb74992cc3482b350163a1a010',
+            link: `http://localhost:3000/api/users/verify/${verifyToken}`,
           },
         },
         outro:
           "Need help, or have questions? Just reply to this email, we'd love to help.",
       },
     };
+    const emailBody = mailGenerator.generate(template);
+    return emailBody;
   }
-  async sendEmail(verifyToken, email, name) {}
+  async sendEmail(verifyToken, email, name) {
+    const emailBody = this.#createTemplate(verifyToken, name);
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+    console.log(email);
+    const msg = {
+      to: email, // Change to your recipient
+      // from: 'noreply@system-contacts.com', // Change to your verified sender
+      from: 'didorsn@gmail.com',
+      subject: 'Sending with SendGrid is Fun',
+      html: emailBody,
+    };
+
+    await this.#sender.send(msg);
+  }
 }
 
 module.exports = EmailService;

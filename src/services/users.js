@@ -1,7 +1,7 @@
 const UsersRepository = require('../repository/users');
 const EmailService = require('./email');
-const { errorHandler } = require('../helpers/errorHandler');
-const { nanoid } = required('nanoid');
+const errorHandler = require('../helpers/errorHandler');
+const { nanoid } = require('nanoid');
 
 class UserService {
   constructor() {
@@ -17,7 +17,8 @@ class UserService {
     try {
       await this.emailService.sendEmail(verifyToken, email, name);
     } catch (error) {
-      throw new errorHandler(503, error.message, 'Service Unavailable');
+      console.log(error);
+      // throw new errorHandler(503, error.message, 'Service Unavailable');
     }
     const data = await this.repositories.users.createUser({ ...body, verifyToken });
     return data;
@@ -39,11 +40,11 @@ class UserService {
 
   async verify({ token }) {
     const user = await this.repositories.users.findByField({ verifyToken: token });
-    if (user) {
-      return true;
+    if (!user) {
+      return false;
     }
     await user.updateOne({ verify: true, verifyToken: null });
-    return false;
+    return true;
   }
 }
 

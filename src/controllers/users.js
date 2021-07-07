@@ -106,11 +106,12 @@ const verify = async (req, res, next) => {
         code: '200',
         message: 'Verification successful',
       });
+    } else {
+      return next({
+        status: '404 Not Found',
+        message: 'User not found',
+      });
     }
-    return next({
-      status: '404 Not Found',
-      message: 'User not found',
-    });
   } catch (error) {
     next(error);
   }

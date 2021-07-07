@@ -15,6 +15,11 @@ class UsersRepository {
     return result;
   }
 
+  async findByField(verifyToken) {
+    const result = await this.model.findOne(verifyToken);
+    return result;
+  }
+
   async createUser(body) {
     const user = new this.model(body);
     return user.save();
